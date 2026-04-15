@@ -1,0 +1,11 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+
+Human_Action_Recognition/
+fall_dataset/
+
+submission.csv
+fall_holdout_predictions.csv
+best_by_f2.keras
