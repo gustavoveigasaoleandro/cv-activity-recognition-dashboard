@@ -1,84 +1,80 @@
 # cv-activity-recognition-dashboard
 
-Projeto de visao computacional com foco em classificacao de atividades humanas e deteccao de queda usando TensorFlow e um dashboard em Dash para inferencia por imagem.
+Projeto de visao computacional para classificacao de atividades humanas e estudo de deteccao de quedas, com treinamento em TensorFlow e dashboard Dash para inferencia por imagem.
 
-## O que o repositorio contem
+## Conteudo
 
 - `preparing_ds.py`: pipeline de treinamento para classificacao multiclasse de acoes humanas com EfficientNetV2B0.
-- `preparing_ds2.py`: experimento separado para classificacao de quedas a partir de um dataset estruturado em imagens e labels.
-- `dash/`: interface web simples para carregar uma imagem e visualizar a classe mais provavel e o top 3 de previsoes.
-- `best_by_f1.keras`: checkpoint final utilizado pelo dashboard.
-- `Checkpoint/F1checkpoint.py`: callback customizado de treinamento.
+- `preparing_ds2.py`: experimento separado para classificacao de estados relacionados a queda.
+- `dash/`: interface web para upload de imagem e visualizacao das previsoes.
+- `best_by_f1.keras`: checkpoint utilizado pelo dashboard.
+- `Checkpoint/F1checkpoint.py`: callback customizado que salva o melhor modelo por F1 macro.
+- `requirements.txt`: dependencias do projeto.
 
-## O que foi removido
+## Objetivo
 
-Para manter o repositorio leve e seguro, esta versao nao inclui:
+O repositorio demonstra um fluxo completo de estudo em visao computacional:
 
-- datasets brutos (`Human_Action_Recognition/` e `fall_dataset/`);
-- ambiente virtual local;
-- arquivos de submissao e predicoes geradas;
-- artefatos auxiliares que nao sao necessarios para leitura do projeto.
+- preparacao de datasets de imagem;
+- treinamento com transfer learning;
+- avaliacao por F1 macro;
+- geracao de predicoes;
+- empacotamento de um modelo treinado;
+- inferencia em interface web simples.
 
-Nao foram encontrados segredos, tokens ou chaves de API no material publicado.
+## Bases de Dados
 
-## Bases de dados utilizadas
+O projeto foi estruturado para trabalhar com duas bases distintas, ambas removidas da publicacao.
 
-O projeto foi estruturado para trabalhar com duas bases distintas, ambas removidas desta versao publicada.
+### Human Action Recognition
 
-### 1. Base de classificacao de acoes humanas
+Consumida por `preparing_ds.py`, esperada em `Human_Action_Recognition/`:
 
-Consumida por `preparing_ds.py`, esta base e esperada no diretorio `Human_Action_Recognition/` com a seguinte estrutura:
+- `Training_set.csv`: arquivo de treino com colunas `filename` e `label`;
+- `Testing_set.csv`: arquivo de teste com coluna `filename`;
+- `train/`: imagens de treino;
+- `test/`: imagens de teste/inferencia.
 
-- `Training_set.csv`: arquivo de treino com colunas `filename` e `label`
-- `Testing_set.csv`: arquivo de teste com coluna `filename`
-- `train/`: imagens usadas no treinamento
-- `test/`: imagens usadas para inferencia/submissao
+As classes sao obtidas diretamente das labels presentes em `Training_set.csv`.
 
-No pipeline, os nomes das classes sao obtidos a partir das labels presentes em `Training_set.csv`, e o modelo treina uma classificacao multiclasse de acoes humanas com `EfficientNetV2B0`.
+### Fall Dataset
 
-### 2. Base de deteccao/classificacao de queda
+Consumida por `preparing_ds2.py`, esperada em `fall_dataset/`:
 
-Consumida por `preparing_ds2.py`, esta base e esperada no diretorio `fall_dataset/` com a seguinte estrutura:
+- `images/train`;
+- `images/val`;
+- `labels/train`;
+- `labels/val`.
 
-- `images/train`
-- `images/val`
-- `labels/train`
-- `labels/val`
+As classes fixas no codigo sao:
 
-As anotacoes sao lidas a partir dos arquivos de label e convertidas para tres classes fixas no codigo:
+- `falling_person`;
+- `lying_person`;
+- `standing_person`.
 
-- `falling_person`
-- `lying_person`
-- `standing_person`
+O material original nao registra com precisao nome oficial, link ou licenca dessas bases. Por isso, a documentacao descreve apenas estrutura e uso observados no codigo.
 
-Esse segundo pipeline trata o problema como classificacao de estado/atividade relacionada a queda, reutilizando `EfficientNetV2B0` como backbone.
+## Como Executar o Dashboard
 
-### Origem e licenca
-
-O material original deste projeto nao registra com precisao o nome oficial, o link de origem ou a licenca dessas duas bases. Por isso, esta documentacao descreve apenas a estrutura e o uso observados no codigo, sem atribuir uma fonte externa que nao esteja comprovada no repositorio.
-
-## Como executar o dashboard
-
-1. Instale as dependencias:
+Instale as dependencias:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Inicie a interface:
+Execute:
 
 ```bash
 cd dash
 python app.py
 ```
 
-O dashboard usa `best_by_f1.keras`. Se `Human_Action_Recognition/Training_set.csv` nao estiver presente, a interface ainda funciona, mas exibira nomes genericos de classe (`class_0`, `class_1`, etc.).
+Se `Human_Action_Recognition/Training_set.csv` nao estiver presente, o dashboard ainda funciona, mas exibe nomes genericos de classe (`class_0`, `class_1`, etc.).
 
-## Como reutilizar os scripts de treino
+## Cuidados de Publicacao
 
-Os scripts assumem que os datasets existam localmente nestes caminhos:
+Nao foram publicados datasets brutos, ambiente virtual, arquivos de submissao ou predicoes geradas. O checkpoint `best_by_f1.keras` foi mantido porque permite testar a inferencia sem retreinar o modelo.
 
-- `Human_Action_Recognition/`
-- `fall_dataset/`
+## Limitacoes
 
-Se voce quiser reproduzir o treinamento, recoloque os datasets nesses diretorios antes de executar os scripts.
+Este projeto e educacional. Para uso real, seria necessario documentar a origem/licenca dos dados, validar vieses, medir desempenho por classe e criar um fluxo de inferencia mais robusto.
