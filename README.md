@@ -21,6 +21,42 @@ Para manter o repositorio leve e seguro, esta versao nao inclui:
 
 Nao foram encontrados segredos, tokens ou chaves de API no material publicado.
 
+## Bases de dados utilizadas
+
+O projeto foi estruturado para trabalhar com duas bases distintas, ambas removidas desta versao publicada.
+
+### 1. Base de classificacao de acoes humanas
+
+Consumida por `preparing_ds.py`, esta base e esperada no diretorio `Human_Action_Recognition/` com a seguinte estrutura:
+
+- `Training_set.csv`: arquivo de treino com colunas `filename` e `label`
+- `Testing_set.csv`: arquivo de teste com coluna `filename`
+- `train/`: imagens usadas no treinamento
+- `test/`: imagens usadas para inferencia/submissao
+
+No pipeline, os nomes das classes sao obtidos a partir das labels presentes em `Training_set.csv`, e o modelo treina uma classificacao multiclasse de acoes humanas com `EfficientNetV2B0`.
+
+### 2. Base de deteccao/classificacao de queda
+
+Consumida por `preparing_ds2.py`, esta base e esperada no diretorio `fall_dataset/` com a seguinte estrutura:
+
+- `images/train`
+- `images/val`
+- `labels/train`
+- `labels/val`
+
+As anotacoes sao lidas a partir dos arquivos de label e convertidas para tres classes fixas no codigo:
+
+- `falling_person`
+- `lying_person`
+- `standing_person`
+
+Esse segundo pipeline trata o problema como classificacao de estado/atividade relacionada a queda, reutilizando `EfficientNetV2B0` como backbone.
+
+### Origem e licenca
+
+O material original deste projeto nao registra com precisao o nome oficial, o link de origem ou a licenca dessas duas bases. Por isso, esta documentacao descreve apenas a estrutura e o uso observados no codigo, sem atribuir uma fonte externa que nao esteja comprovada no repositorio.
+
 ## Como executar o dashboard
 
 1. Instale as dependencias:
